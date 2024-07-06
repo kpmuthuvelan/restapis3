@@ -96,3 +96,37 @@ def update_movie(name, year):
         if expected_version and expected_version != current_version:
             return jsonify({"error": "Version conflict"}), 409
 ```
+
+Observability
+- Can be implemented at each stage of the Flow. Eg in CDN/API Gateway, Kubernetes or the Server itself.
+- Promethues exporter can be enabled on a different port in the restapi service. Please see sample code
+
+```
+from prometheus_client import start_http_server, Summary, Counter, Gauge, generate_latest
+
+...
+
+# Prometheus metrics
+REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
+REQUEST_COUNT = Counter('request_count', 'Number of requests received', ['method', 'endpoint'])
+ERROR_COUNT = Counter('error_count', 'Number of errors encountered', ['method', 'endpoint'])
+IN_PROGRESS = Gauge('inprogress_requests', 'Number of requests in progress')
+
+@app.before_request
+def before_request():
+    request.start_time = REQUEST_TIME.time()
+    REQUEST_COUNT.labels(request.method, request.path).inc()
+    IN_PROGRESS.inc()
+
+@app.after_request
+def after_request(response):
+    request.start_time.stop()
+    IN_PROGRESS.dec()
+    return response
+
+@app.teardown_request
+def teardown_request(exception=None):
+    if exception:
+        ERROR_COUNT.labels(request.method, request.path).inc()
+```
+

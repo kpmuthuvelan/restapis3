@@ -21,10 +21,12 @@
 	
 	
 Dockerize
+- Review README in Dockerfiles folder
 - Use the Dockerfile, docker-compose.yml and requirements.txt
 - Push to dockerhub using following instructions
 	- docker build -t dockerhub_username/movies-api .
 	- docker push dockerhub_username/movies-api
 
 Kubernetes
+- Review README in Kubernetes folder
 - Check kubernetes folder for kubernetes yaml to deploy to a kubernetes cluster

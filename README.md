@@ -45,7 +45,7 @@ Authentication/Authorization
 - Authorization can performed using OAuth Server and JWT tokens.
 - See below the changes to implement in the current codeusing builtin user management. Ideally should use AWS IAM Roles based access.
 
-
+```
 ....
 users = {
     "testuser": "testpassword"
@@ -67,13 +67,14 @@ def login():
 @jwt_required()
 def get_movies():
 
-
+```
 High Availability
 - Kubernetes deployment with 3 replicas
 - In order to support high availability, we need to run the server in parallel.
 - In that case we need to have lock managment in place.
 - Below code does optimistic locking as it just error if the file have been modified in S3.
 
+```
 @app.route('/api/movies/<name>/<int:year>', methods=['PUT'])
 
 def update_movie(name, year):
@@ -92,3 +93,4 @@ def update_movie(name, year):
         # Check for version conflict
         if expected_version and expected_version != current_version:
             return jsonify({"error": "Version conflict"}), 409
+```

@@ -1,6 +1,7 @@
 
 * Architecture Diagram
 
+```
   Simple Model
   [Client] ----> [RestAPI Server] ----> [AWS S3]
 
@@ -13,7 +14,8 @@
 
 	
   Client can can be anything from curl, postman, python (requests), powershell (Invoke-WebRequest), etc
-  
+  ```
+
 * Create a movies.json file as [{}] in the s3 bucket
 
 * To run the server locally

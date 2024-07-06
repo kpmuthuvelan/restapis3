@@ -133,3 +133,6 @@ def teardown_request(exception=None):
         ERROR_COUNT.labels(request.method, request.path).inc()
 ```
 
+Security
+- DDoS Attacks can be prevented by having rate-limiting at each point starting from CDN or API Gateway
+- Whitelisting of the possible client IPs. Its easier in from CDN to Origin Server

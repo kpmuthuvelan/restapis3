@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: movies-api
+  template:
+    metadata:
+      labels:
+        app: movies-api
+    spec:
+      containers:
+      - name: movies-api
+        image: dockerhub_username/movies-api:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: AWS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: movies-api-secrets
+              key: AWS_ACCESS_KEY
+        - name: AWS_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: movies-api-secrets
+              key: AWS_SECRET_KEY
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: movies-api-secrets
+              key: JWT_SECRET_KEY
+        envFrom:
+        - configMapRef:
+            name: #movies-api-config
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movies-api
+spec:
+  selector:
+    app: movies-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: movies-api-secrets
+type: Opaque
+data:
+  AWS_ACCESS_KEY: base64_encoded_aws_access_key
+  AWS_SECRET_KEY: base64_encoded_aws_secret_key
+  JWT_SECRET_KEY: base64_encoded_jwt_secret_key
+---
+

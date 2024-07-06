@@ -71,10 +71,13 @@ def get_movies():
 
 ```
 High Availability
-- Kubernetes deployment with 3 replicas
+- HA can be enabled at each point in the flow trasactions
+- In CDN
+- In API Gateway
+- In Kubernetes - deployment with 3 replicas
 - In order to support high availability, we need to run the server in parallel.
 - In that case we need to have lock managment in place.
-- Below code does optimistic locking as it just error if the file have been modified in S3.
+- Below code does optimistic locking as it just error checks if the file have been modified in S3.
 
 ```
 @app.route('/api/movies/<name>/<int:year>', methods=['PUT'])
